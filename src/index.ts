@@ -1,3 +1,6 @@
 export { default as ApiConfig } from './ApiConfig'
 export { default as useApi } from './useApi'
+export { default as useLazyApi } from './useLazyApi'
+export { default as useMutateApi } from './useMutateApi'
+export { default as useRevalidateApi } from './useRevalidateApi'
 export type { Api, ApiConfiguration } from './types'

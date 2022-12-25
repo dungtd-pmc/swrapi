@@ -1,4 +1,4 @@
-import type { NormalObject, FetcherOptions, FetcherError } from './types'
+import type { NormalObject, FetcherOptions, FetcherError, ApiInit, ApiKey, ApiConfiguration } from './types'
 
 const isArray = <T>(obj: T) => Array.isArray(obj)
 const isNormalObject = <T>(obj: T) => typeof obj === 'object' && obj !== null && !isArray(obj)
@@ -16,7 +16,10 @@ export const deepMerge = <T1, T2>(obj1: T1, obj2: T2) => {
   return obj as T1 & T2
 }
 
-export const generateSWRKey = (path: string, opts: FetcherOptions) => [path, JSON.parse(JSON.stringify(opts))]
+export const generateSWRKey = <K extends ApiKey>(defaultOpts: FetcherOptions, config: ApiConfiguration[K], init: ApiInit<K>) => {
+  const [path, configOpts] = Array.isArray(config) ? config : [config]
+  return [path, JSON.parse(JSON.stringify(deepMerge(deepMerge(defaultOpts, configOpts), init)))]
+}
 
 const generatePath = (path: string, params: Record<string, string | number>) => path.replace(/:(\w+)/g, (_, key: string) => {
   const param = params[key]

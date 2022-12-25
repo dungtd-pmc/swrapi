@@ -10,6 +10,8 @@ export interface APIs {}
 
 export type ApiKey = keyof APIs
 
+export type ApiInit<K extends ApiKey> = FetcherOptions<APIs[K]['params']>
+
 export type ApiConfiguration = Record<ApiKey, string | [string, FetcherOptions]>
 
 interface FParams {
