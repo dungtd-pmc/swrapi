@@ -1,6 +1,6 @@
 {
   "name": "swrapi",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "SWR wrapper for faster usage",
   "repository": "https://github.com/dungtd-pmc/swrapi",
   "author": "dungtd-pmc",
