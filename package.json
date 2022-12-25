@@ -1,11 +1,15 @@
 {
   "name": "swrapi",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "description": "SWR wrapper for faster usage",
+  "repository": "https://github.com/dungtd-pmc/swrapi",
+  "author": "dungtd-pmc",
   "license": "MIT",
   "source": "src/index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/types.d.ts",
+  "files": ["dist"],
   "scripts": {
     "watch": "parcel watch",
     "build": "parcel build",
