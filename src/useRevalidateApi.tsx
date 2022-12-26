@@ -4,7 +4,7 @@ import { useApiConfig } from "./ApiConfigContext"
 import { generateSWRKey } from "./utils"
 import type { ApiInit, ApiKey } from "./types"
 
-export default function useRevalidateApi() {
+export default function useRevalidateApi(): <K extends ApiKey>(key: K, init?: ApiInit<K>) => void {
   const { api, baseUrl } = useApiConfig()
   const { mutate } = useSWRConfig()
 
