@@ -12,6 +12,8 @@ export type ApiKey = keyof APIs
 
 export type ApiInit<K extends ApiKey> = FetcherOptions<APIs[K]['params']>
 
+export type PartialApiInit<K extends ApiKey> = FetcherOptions<Partial<APIs[K]['params']>>
+
 export type ApiInitTuple = {
   [K in ApiKey]: [K, ApiInit<K>]
 }

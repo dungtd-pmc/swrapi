@@ -1,11 +1,11 @@
 import useApi from "./useApi"
 import { useCallback, useState } from "react"
 import { deepMerge } from "./utils"
-import type { ApiInit, ApiKey } from "./types"
+import type { ApiKey, ApiInit, PartialApiInit } from "./types"
 // workaround for importing nested types
 import type { APIs, FetcherError } from './types'
 
-interface LazyApiOptions<K extends ApiKey> extends ApiInit<K> {
+interface LazyApiOptions<K extends ApiKey> extends PartialApiInit<K> {
 }
 
 export default function useLazyApi<K extends ApiKey>(key: K, defaultOpts: LazyApiOptions<K> = {}) {
@@ -17,7 +17,7 @@ export default function useLazyApi<K extends ApiKey>(key: K, defaultOpts: LazyAp
     setSkip(false)
   }, [])
 
-  const result = useApi<K>(key, { ...deepMerge(defaultOpts, opts), skip })
+  const result = useApi<K>(key, { ...(deepMerge(defaultOpts, opts) as ApiInit<K>), skip })
 
   return [fetch, result] as const
 }
