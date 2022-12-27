@@ -1,9 +1,9 @@
 import { createContext, useContext } from "react";
-import type { ApiConfiguration } from "./types";
+import type { ApiConfiguration, FetcherInit } from "./types";
 
 interface ApiConfigContext {
   api: ApiConfiguration
-  baseUrl?: string
+  defaultFetcherInit?: FetcherInit
 }
 
 const ApiConfigContext = createContext<ApiConfigContext>({

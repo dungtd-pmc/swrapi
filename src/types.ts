@@ -10,15 +10,15 @@ export interface APIs {}
 
 export type ApiKey = keyof APIs
 
-export type ApiInit<K extends ApiKey> = FetcherOptions<APIs[K]['params']>
+export type ApiInit<K extends ApiKey> = FetcherInit<APIs[K]['params']>
 
-export type PartialApiInit<K extends ApiKey> = FetcherOptions<Partial<APIs[K]['params']>>
+export type PartialApiInit<K extends ApiKey> = FetcherInit<Partial<APIs[K]['params']>>
 
 export type ApiInitTuple = {
   [K in ApiKey]: [K, ApiInit<K>]
 }
 
-export type ApiConfiguration = Record<ApiKey, string | [string, FetcherOptions]>
+export type ApiConfiguration = Record<ApiKey, string | [string, FetcherInit]>
 
 interface FParams {
   path?: any
@@ -33,7 +33,7 @@ export interface FetcherError<T> extends Error {
   status?: number
 }
 
-export interface FetcherOptions<T extends FParams = FParams> extends RequestInit {
+export interface FetcherInit<T extends FParams = FParams> extends RequestInit {
   baseUrl?: string
   params?: FetcherParams<T>
 }

@@ -10,13 +10,13 @@ export interface ApiOptions<K extends ApiKey> extends ApiInit<K> {
 
 export default function useApi<K extends ApiKey>(key: K, opts: ApiOptions<K> = {}) {
   const { skip, ...fetcherOpts } = opts
-  const { api, baseUrl } = useApiConfig()
+  const { api, defaultFetcherInit = {} } = useApiConfig()
   const config = api[key]
 
   const swrKey = useMemo(() => {
     if (skip) return null
-    return generateSWRKey({ baseUrl }, config, fetcherOpts)
-  }, [skip, baseUrl, config, fetcherOpts])
+    return generateSWRKey(defaultFetcherInit, config, fetcherOpts)
+  }, [skip, defaultFetcherInit, config, fetcherOpts])
 
   return useSWR<APIs[K]['data'], FetcherError<APIs[K]['error']>>(swrKey)
 }

@@ -1,4 +1,4 @@
-import type { NormalObject, FetcherOptions, FetcherError, ApiInit, ApiKey, ApiConfiguration } from './types'
+import type { NormalObject, FetcherInit, FetcherError, ApiInit, ApiKey, ApiConfiguration } from './types'
 
 const isArray = <T>(obj: T) => Array.isArray(obj)
 const isNormalObject = <T>(obj: T) => typeof obj === 'object' && obj !== null && !isArray(obj)
@@ -16,7 +16,7 @@ export const deepMerge = <T1, T2>(obj1: T1, obj2: T2) => {
   return obj as T1 & T2
 }
 
-export const generateSWRKey = <K extends ApiKey>(defaultOpts: FetcherOptions, config: ApiConfiguration[K], init: ApiInit<K>) => {
+export const generateSWRKey = <K extends ApiKey>(defaultOpts: FetcherInit, config: ApiConfiguration[K], init: ApiInit<K>) => {
   const [path, configOpts] = Array.isArray(config) ? config : [config]
   return [path, JSON.parse(JSON.stringify(deepMerge(deepMerge(defaultOpts, configOpts), init)))]
 }
@@ -32,7 +32,7 @@ const getData = async <TData>(res: Response) => {
   return res.text() as TData
 }
 
-export const fetcher = async <TData = unknown, TError = unknown>(path: string, opts: FetcherOptions = {}) => {
+export const fetcher = async <TData = unknown, TError = unknown>(path: string, opts: FetcherInit = {}) => {
   const {
     baseUrl = window.location.origin,
     params,
@@ -66,4 +66,4 @@ export const fetcher = async <TData = unknown, TError = unknown>(path: string, o
   return await getData<TData>(res)
 }
 
-export const swrFetcher = (args: [string, FetcherOptions]) => fetcher(...args)
+export const swrFetcher = (args: [string, FetcherInit]) => fetcher(...args)

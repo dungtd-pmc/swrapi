@@ -5,14 +5,14 @@ import { generateSWRKey } from "./utils"
 import type { ApiInit, ApiKey } from "./types"
 
 export default function useRevalidateApi(): <K extends ApiKey>(key: K, init?: ApiInit<K>) => void {
-  const { api, baseUrl } = useApiConfig()
+  const { api, defaultFetcherInit = {} } = useApiConfig()
   const { mutate } = useSWRConfig()
 
   const revalidate = useCallback(<K extends ApiKey>(key: K, init: ApiInit<K> = {}) => {
     const config = api[key]
-    const swrKey = generateSWRKey({ baseUrl }, config, init)
+    const swrKey = generateSWRKey(defaultFetcherInit, config, init)
     mutate(swrKey)
-  }, [api, baseUrl, mutate])
+  }, [api, defaultFetcherInit, mutate])
 
   return revalidate
 }

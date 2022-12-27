@@ -4,7 +4,7 @@ import { useApiConfig } from './ApiConfigContext'
 import { deepMerge, generateSWRKey, swrFetcher } from './utils'
 import useDataRef from './useDataRef'
 import useRevalidateApi from './useRevalidateApi'
-import type { APIs, ApiKey, ApiInit, FetcherError, FetcherOptions, ApiInitTuple, PartialApiInit } from './types'
+import type { APIs, ApiKey, ApiInit, FetcherError, FetcherInit, ApiInitTuple, PartialApiInit } from './types'
 
 interface MutateApiOptions<K extends ApiKey> extends PartialApiInit<K> {
   onSuccess?: (data: APIs[K]['data']) => void
@@ -15,7 +15,7 @@ interface MutateApiOptions<K extends ApiKey> extends PartialApiInit<K> {
 export default function useMutateApi<K extends ApiKey>(key: K, defaultOpts: MutateApiOptions<K> = {}) {
   const revalidate = useRevalidateApi()
   const defaultOptsRef = useDataRef(defaultOpts)
-  const { api, baseUrl } = useApiConfig()
+  const { api, defaultFetcherInit = {} } = useApiConfig()
   const { fetcher = swrFetcher } = useSWRConfig()
   const config = api[key]
 
@@ -30,7 +30,7 @@ export default function useMutateApi<K extends ApiKey>(key: K, defaultOpts: Muta
     let data: APIs[K]['data'] | null = null
     let error: FetcherError<APIs[K]['error']> | null = null
     try {
-      const swrKey = generateSWRKey({ baseUrl }, config, deepMerge(restOpts, opts) as ApiInit<K>) as [string, FetcherOptions]
+      const swrKey = generateSWRKey(defaultFetcherInit, config, deepMerge(restOpts, opts) as ApiInit<K>) as [string, FetcherInit]
       data = await fetcher(swrKey) as APIs[K]['data']
 
       if (onSuccess) setTimeout(() => onSuccess(data!), 0)
@@ -51,7 +51,7 @@ export default function useMutateApi<K extends ApiKey>(key: K, defaultOpts: Muta
     setIsLoading(false)
 
     return { data, error }
-  }, [config, baseUrl, fetcher, revalidate])
+  }, [config, defaultFetcherInit, fetcher, revalidate])
 
   return [mutate, { isLoading, data, error }] as const
 }
