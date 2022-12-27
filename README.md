@@ -15,6 +15,16 @@ yarn add swr swrapi
 import type { ApiConfiguration } from 'swrapi'
 
 interface ExampleData {
+  id: string
+  name: string
+}
+
+interface ExampleError {
+  status: string
+  message: string
+}
+
+interface ExampleBody {
   name: string
 }
 
@@ -52,6 +62,8 @@ function App() {
 ```
 
 3. Use it
+
+GET example
 ```js
 // example.tsx
 import { useApi } from 'swrapi'
@@ -59,6 +71,48 @@ import { useApi } from 'swrapi'
 function Example() {
   const { data, error, isLoading } = useApi('GET_EXAMPLE')
 
+  if (error) return <div>failed to load</div>
+  if (isLoading) return <div>loading...</div>
+  return <div>hello {data.name}!</div>
+}
+```
+
+Lazy GET example
+```js
+// example.tsx
+import { useLazyApi } from 'swrapi'
+
+function Example() {
+  const [getExample, { data, error, isLoading }] = useLazyApi('GET_EXAMPLE')
+
+  useEffect(() => getExample(), [])
+  
+  if (error) return <div>failed to load</div>
+  if (isLoading) return <div>loading...</div>
+  return <div>hello {data.name}!</div>
+}
+```
+
+POST example
+```js
+// example.tsx
+import { useMutateApi } from 'swrapi'
+
+function Example() {
+  const [postExample, { data, error, isLoading }] = useMutateApi('POST_EXAMPLE', {
+    revalidateAPIs: ['GET_EXAMPLE'] // Optional. Used to revalidate multiple active APIs
+  })
+
+  useEffect(() => {
+    postExample({
+      params: {
+        body: {
+          name: 'Foo Bar'
+        }
+      }
+    })
+  }, [])
+  
   if (error) return <div>failed to load</div>
   if (isLoading) return <div>loading...</div>
   return <div>hello {data.name}!</div>
