@@ -17,7 +17,7 @@ export const deepMerge = <T1, T2>(obj1: T1, obj2: T2) => {
 }
 
 export const generateSWRKey = <K extends ApiKey>(defaultOpts: FetcherInit, config: ApiConfiguration[K], init: ApiInit<K>) => {
-  const [path, configOpts] = Array.isArray(config) ? config : [config]
+  const [path, configOpts = {}] = Array.isArray(config) ? config : [config]
   return [path, JSON.parse(JSON.stringify(deepMerge(deepMerge(defaultOpts, configOpts), init)))]
 }
 
